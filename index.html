@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Enterprise Transformation — Program Resource Plan</title>
+<title>Enterprise Program Resource Plan</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <style>
 :root{color-scheme:light;--navy:#0f2744;--navy2:#1a3a5c;--blue:#2563eb;--purple:#7c3aed;--green:#059669;--teal:#0f766e;--orange:#ea580c;--slate:#475569;--muted:#64748b;--border:#e2e8f0;--bg:#f1f5f9;--card:#fff;--text:#1e293b;}
@@ -29,7 +29,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .card-title{font-size:13px;font-weight:700;color:var(--navy2);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .card-title span{font-size:11px;font-weight:400;color:var(--muted);}
 /* ORG */
-.org-wrap{overflow-x:auto;padding:8px 0 16px;}
+.org-wrap{overflow-x:auto;padding:8px 0 16px;position:relative;}
 .org-box{border-radius:8px;padding:8px 12px;text-align:center;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;}
 .ob-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;line-height:1.3;}
 .ob-sub{font-size:9px;opacity:.8;margin-top:2px;line-height:1.2;}
@@ -37,6 +37,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ob-enterprise .ob-label{font-size:14px;letter-spacing:.6px;}
 .ob-enterprise .ob-sub{font-size:10px;opacity:.65;}
 .ob-owner{background:linear-gradient(135deg,#0f2744,#1a3a5c);color:#fff;min-width:185px;padding:12px 18px;box-shadow:0 2px 8px rgba(15,39,68,.25);}
+.ob-enterprise-node{background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;min-width:185px;padding:12px 18px;box-shadow:0 2px 8px rgba(30,27,75,.25);}
+.ob-esc{background:linear-gradient(135deg,#020617,#0f172a);color:#fff;padding:15px 36px;border-radius:10px;box-shadow:0 3px 18px rgba(2,6,23,.45);}
+.ob-esc .ob-label{font-size:14px;letter-spacing:.7px;}
+.ob-esc .ob-sub{font-size:10px;opacity:.6;}
 .ob-bpo{background:linear-gradient(135deg,#065f46,#0f766e);color:#fff;min-width:185px;padding:12px 18px;box-shadow:0 2px 8px rgba(6,95,70,.25);}
 .ob-pgm{background:var(--navy);color:#fff;min-width:190px;padding:11px 16px;}
 .ob-support{background:var(--navy2);color:#fff;min-width:160px;}
@@ -60,6 +64,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ob-hackett{background:#fefce8;border:1.5px solid #ca8a04;color:#713f12;min-width:100px;}
 .ob-process{background:#ecfdf5;border:2px solid var(--teal);color:#134e4a;min-width:138px;font-weight:700;}
 .ob-cm{background:var(--teal);color:#fff;min-width:138px;}
+.ob-epg{background:linear-gradient(135deg,#312e81,#4338ca);color:#fff;min-width:138px;}
+.sec-gov td{background:#4338ca;}
+.sst-gov{background:#4338ca;}
 .vline{width:2px;height:18px;background:#cbd5e1;margin:0 auto;}
 .ws-row{display:flex;gap:16px;justify-content:center;flex-wrap:nowrap;align-items:flex-start;}
 .ws-col{display:flex;flex-direction:column;align-items:center;}
@@ -138,13 +145,39 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
 .A{color:#d97706;font-weight:800;}
 .C{color:#2563eb;font-weight:700;}
 .I{color:#94a3b8;font-weight:600;}
+/* WORKSTREAM TOGGLES */
+.ws-toggle-bar{background:#fff;border-bottom:1px solid var(--border);padding:7px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ws-toggle-label{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-right:4px;}
+.ws-btn{padding:4px 13px;border-radius:20px;border:2px solid;cursor:pointer;font-size:11px;font-weight:700;transition:all .18s;opacity:.38;background:transparent;line-height:1.4;}
+.ws-btn.active{opacity:1;}
+.ws-btn-erp{border-color:var(--blue);color:var(--blue);}
+.ws-btn-erp.active{background:var(--blue);color:#fff;}
+.ws-btn-crm{border-color:var(--purple);color:var(--purple);}
+.ws-btn-crm.active{background:var(--purple);color:#fff;}
+.ws-btn-epm{border-color:var(--green);color:var(--green);}
+.ws-btn-epm.active{background:var(--green);color:#fff;}
+.ws-btn-adp{border-color:var(--orange);color:var(--orange);}
+.ws-btn-adp.active{background:var(--orange);color:#fff;}
+/* PM ROLE BORDER */
+.pm-role{border:3px solid #0f172a !important;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 4px 14px rgba(0,0,0,.25) !important;}
+.si-pm-role{border:4.5px solid #0f172a !important;box-shadow:0 0 0 2px rgba(0,0,0,.18),0 5px 18px rgba(0,0,0,.32) !important;}
+/* SI PM STANDOUT */
+.ob-sipm-erp{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;min-width:100px;box-shadow:0 3px 12px rgba(37,99,235,.45);border:none;}
+.ob-sipm-crm{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;min-width:100px;box-shadow:0 3px 12px rgba(124,58,237,.45);border:none;}
+.ob-sipm-epm{background:linear-gradient(135deg,#065f46,#059669);color:#fff;min-width:100px;box-shadow:0 3px 12px rgba(5,150,105,.45);border:none;}
+.ob-sipm-adp{background:linear-gradient(135deg,#9a3412,#ea580c);color:#fff;min-width:100px;box-shadow:0 3px 12px rgba(234,88,12,.45);border:none;}
+/* RS&H FUNCTIONAL */
+.ob-func-erp{background:#dbeafe;border:2px solid #1d4ed8;color:#1e3a8a;min-width:100px;font-weight:700;}
+.ob-func-crm{background:#ede9fe;border:2px solid #5b21b6;color:#3b0764;min-width:100px;font-weight:700;}
+.ob-func-epm{background:#d1fae5;border:2px solid #059669;color:#064e3b;min-width:100px;font-weight:700;}
+.ob-func-adp{background:#fed7aa;border:2px solid #ea580c;color:#7c2d12;min-width:100px;font-weight:700;}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-left">
-    <h1>Enterprise Transformation</h1>
+    <h1>Project Velocity</h1>
     <p>Program Management Resource Plan &nbsp;·&nbsp; RS&amp;H &nbsp;·&nbsp; 18–24 Month Implementation &nbsp;·&nbsp; 5 Phases</p>
   </div>
   <div class="hdr-badges">
@@ -156,12 +189,21 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
   </div>
 </div>
 
+<div class="ws-toggle-bar">
+  <span class="ws-toggle-label">Workstreams:</span>
+  <button class="ws-btn ws-btn-erp active" onclick="toggleWS('ERP',this)">ERP</button>
+  <button class="ws-btn ws-btn-crm active" onclick="toggleWS('CRM',this)">CRM</button>
+  <button class="ws-btn ws-btn-epm active" onclick="toggleWS('EPM',this)">EPM</button>
+  <button class="ws-btn ws-btn-adp active" onclick="toggleWS('ADP',this)">ADP Lyric</button>
+</div>
+
 <div class="tabs">
   <div class="tab active" onclick="switchTab('org',this)">🏗 Org Chart</div>
   <div class="tab" onclick="switchTab('resource',this)">👥 Resource Plan</div>
   <div class="tab" onclick="switchTab('timeline',this)">📅 Phase Timeline</div>
   <div class="tab" onclick="switchTab('scenario',this)">🎛 Scenario Planner</div>
   <div class="tab" onclick="switchTab('raci',this)">📋 RACI</div>
+  <div class="tab" onclick="switchTab('pmophase',this)">🏛 PMO Engagement</div>
 </div>
 
 <div class="content">
@@ -171,70 +213,74 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
   <div class="card">
     <div class="card-title">Program Organization Structure <span>ERP · CRM · EPM · ADP Lyric</span></div>
     <div class="org-wrap">
-      <div style="min-width:1500px;">
+      <div style="min-width:1720px;">
 
-        <!-- ENTERPRISE TRANSFORMATION TEAM HEADER -->
+        <!-- EXECUTIVE STEERING COMMITTEE HEADER -->
         <div style="display:flex;justify-content:center;margin-bottom:0;">
-          <div class="org-box ob-enterprise">
-            <div class="ob-label">Enterprise Transformation Team</div>
-            <div class="ob-sub">RS&amp;H · Project Velocity</div>
+          <div class="org-box ob-esc">
+            <div class="ob-label">Executive Steering Committee</div>
           </div>
         </div>
 
         <!-- Fixed-width inner wrapper so fork connector always aligns with two-orgs layout regardless of browser width -->
-        <div style="width:1500px;margin:0 auto;">
+        <div style="width:1720px;margin:0 auto;">
 
-        <!-- Fork from ETT → Technology Owner (left) and Business Process Owner (right) -->
-        <!-- Left org (flex:1) = 1500-400 = 1100px → center at 550px = 36.7%; BPO center at 1100+200=1300px → right 13.3% -->
+        <!-- Fork from ESC → Enterprise (left) and Project Velocity (right) -->
+        <!-- Enterprise column: 590px wide → center at 295px = 17%; Project Velocity/Technology (flex:1 ~1130px) → center at 1155px = 67% → right:33% -->
         <div style="position:relative;height:22px;">
           <div style="position:absolute;top:0;left:50%;width:2px;height:10px;background:#cbd5e1;transform:translateX(-50%);"></div>
-          <div style="position:absolute;top:10px;left:37%;right:13%;height:2px;background:#cbd5e1;"></div>
-          <div style="position:absolute;top:10px;left:37%;width:2px;height:12px;background:#cbd5e1;"></div>
-          <div style="position:absolute;top:10px;right:13%;width:2px;height:12px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;left:17%;right:33%;height:2px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;left:17%;width:2px;height:12px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;right:33%;width:2px;height:12px;background:#cbd5e1;"></div>
         </div>
 
-        <!-- TWO ORGS SIDE BY SIDE -->
-        <div style="display:flex;gap:0;align-items:flex-start;">
+        <!-- TWO ORGS SIDE BY SIDE: Enterprise (left) | Technology Owner (right) -->
+        <div style="display:flex;flex-direction:row-reverse;gap:0;align-items:flex-start;">
 
-          <!-- LEFT: TECHNOLOGY TEAM -->
-          <div style="display:flex;flex-direction:column;align-items:center;flex:1;padding:0 20px 0 0;border-right:2px solid #cbd5e1;">
+          <!-- RIGHT: PROJECT VELOCITY / TECHNOLOGY TEAM -->
+          <div style="display:flex;flex-direction:column;align-items:center;flex:1;padding:0 0 0 20px;">
 
-            <div class="org-box ob-owner">
-              <div class="ob-label">Technology Owner</div>
-              <div class="ob-sub">RS&amp;H</div>
+            <div class="org-box ob-enterprise" style="min-width:210px;">
+              <div class="ob-label">Project Velocity</div>
+              <div class="ob-sub">RS&amp;H · Enterprise Transformation</div>
             </div>
             <div class="vline"></div>
 
-            <!-- Program Manager centered; Project Admin floats right via dashed connector -->
+            <!-- Program Manager centered; Hackett PMO floats left, Project Admin floats right -->
             <div style="position:relative;">
-              <div class="org-box ob-pgm" style="min-width:190px;">
+              <div class="org-box ob-pgm pm-role" style="min-width:190px;">
                 <div class="ob-label">Program Manager</div>
                 <div class="ob-sub">RS&amp;H · Portfolio Oversight</div>
+              </div>
+              <div style="position:absolute;right:100%;top:50%;transform:translateY(-50%);display:flex;align-items:center;flex-direction:row-reverse;">
+                <svg width="30" height="14" style="flex-shrink:0;overflow:visible;" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <marker id="hpmo-arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                      <polygon points="0 0, 7 3.5, 0 7" fill="#64748b"/>
+                    </marker>
+                  </defs>
+                  <line x1="2" y1="7" x2="24" y2="7" stroke="#64748b" stroke-width="2" marker-end="url(#hpmo-arr)"/>
+                </svg>
+                <div id="hackett-pmo-right" class="org-box ob-hackett" style="min-width:150px;white-space:nowrap;border:3px solid #0f172a;">
+                  <div class="ob-label">Hackett PMO</div>
+                  <div class="ob-sub">Hackett · PMO Practice</div>
+                </div>
               </div>
               <div style="position:absolute;left:100%;top:50%;transform:translateY(-50%);display:flex;align-items:center;">
                 <div style="width:20px;border-top:2px dashed #94a3b8;flex-shrink:0;"></div>
                 <div class="org-box ob-support" style="min-width:160px;white-space:nowrap;">
                   <div class="ob-label">Project Administrator</div>
-                  <div class="ob-sub">RS&amp;H · Scheduling &amp; Coordination</div>
                 </div>
               </div>
             </div>
 
-            <!-- 4-workstream connector: 4 cols × 240px + 3 gaps × 16px = 1008px total -->
-            <!-- Centers at: 120, 376, 632, 888 px from left -->
-            <div style="position:relative;height:40px;width:1008px;">
-              <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:2px;height:18px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:18px;left:120px;right:120px;height:2px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:18px;left:120px;width:2px;height:22px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:18px;left:376px;width:2px;height:22px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:18px;left:632px;width:2px;height:22px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:18px;left:888px;width:2px;height:22px;background:#cbd5e1;"></div>
-            </div>
+            <!-- Dynamic workstream connector — redrawn by renderWsConnector() on toggle -->
+            <svg id="ws-connector-svg" height="40" width="1008" style="overflow:visible;display:block;margin:0 auto;"></svg>
 
             <div class="ws-row" style="margin-top:0;">
 
               <!-- ERP -->
-              <div class="ws-col" style="width:240px;">
+              <div id="ws-col-erp" class="ws-col" style="width:240px;">
                 <div class="org-box ob-erp" style="width:100%;"><div class="ob-label">ERP Workstream</div><div class="ob-sub">Core Financials and Projects</div></div>
                 <div style="position:relative;height:22px;width:220px;">
                   <div style="position:absolute;top:0;left:50%;width:2px;height:8px;background:#cbd5e1;transform:translateX(-50%);"></div>
@@ -245,9 +291,11 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
                 <div style="display:flex;gap:8px;margin-top:22px;align-items:flex-start;">
                   <div class="ws-col" style="width:106px;">
                     <div class="org-box ob-rsh-erp" style="width:100%;"><div class="ob-label">Technology Team</div><div class="ob-sub">RS&amp;H · Data, Integration &amp; Architecture</div></div>
+                    <div class="vline" style="height:9px;"></div>
+                    <div class="org-box ob-func-erp" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · ERP SME</div></div>
                   </div>
                   <div class="ws-col" style="width:106px;">
-                    <div class="org-box ob-sub-erp" style="width:100%;"><div class="ob-label">SI PM (ERP)</div><div class="ob-sub">System Integrator Lead</div></div>
+                    <div class="org-box ob-sipm-erp si-pm-role" style="width:100%;"><div class="ob-label">SI PM (ERP)</div><div class="ob-sub">System Integrator Lead</div></div>
                     <div class="vline" style="height:9px;"></div>
                     <div class="org-box ob-si-erp" style="width:100%;"><div class="ob-label">Functional Consultant</div><div class="ob-sub">SI · ERP Config</div></div>
                     <div class="vline" style="height:9px;"></div>
@@ -259,7 +307,7 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
               </div>
 
               <!-- CRM -->
-              <div class="ws-col" style="width:240px;">
+              <div id="ws-col-crm" class="ws-col" style="width:240px;">
                 <div class="org-box ob-crm" style="width:100%;"><div class="ob-label">CRM Workstream</div><div class="ob-sub">Sales / Service / Mktg</div></div>
                 <div style="position:relative;height:22px;width:220px;">
                   <div style="position:absolute;top:0;left:50%;width:2px;height:8px;background:#cbd5e1;transform:translateX(-50%);"></div>
@@ -270,9 +318,11 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
                 <div style="display:flex;gap:8px;margin-top:22px;align-items:flex-start;">
                   <div class="ws-col" style="width:106px;">
                     <div class="org-box ob-rsh-crm" style="width:100%;"><div class="ob-label">Technology Team</div><div class="ob-sub">RS&amp;H · Data, Integration &amp; Architecture</div></div>
+                    <div class="vline" style="height:9px;"></div>
+                    <div class="org-box ob-func-crm" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · CRM SME</div></div>
                   </div>
                   <div class="ws-col" style="width:106px;">
-                    <div class="org-box ob-sub-crm" style="width:100%;"><div class="ob-label">SI PM (CRM)</div><div class="ob-sub">System Integrator Lead</div></div>
+                    <div class="org-box ob-sipm-crm si-pm-role" style="width:100%;"><div class="ob-label">SI PM (CRM)</div><div class="ob-sub">System Integrator Lead</div></div>
                     <div class="vline" style="height:9px;"></div>
                     <div class="org-box ob-si-crm" style="width:100%;"><div class="ob-label">Functional Consultant</div><div class="ob-sub">SI · CRM Config</div></div>
                     <div class="vline" style="height:9px;"></div>
@@ -284,7 +334,7 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
               </div>
 
               <!-- EPM -->
-              <div class="ws-col" style="width:240px;">
+              <div id="ws-col-epm" class="ws-col" style="width:240px;">
                 <div class="org-box ob-epm" style="width:100%;"><div class="ob-label">EPM Workstream</div><div class="ob-sub">Planning / Budgeting / Forecasting</div></div>
                 <div style="position:relative;height:22px;width:220px;">
                   <div style="position:absolute;top:0;left:50%;width:2px;height:8px;background:#cbd5e1;transform:translateX(-50%);"></div>
@@ -295,9 +345,11 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
                 <div style="display:flex;gap:8px;margin-top:22px;align-items:flex-start;">
                   <div class="ws-col" style="width:106px;">
                     <div class="org-box ob-rsh-epm" style="width:100%;"><div class="ob-label">Technology Team</div><div class="ob-sub">RS&amp;H · Data, Integration &amp; Architecture</div></div>
+                    <div class="vline" style="height:9px;"></div>
+                    <div class="org-box ob-func-epm" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · EPM SME</div></div>
                   </div>
                   <div class="ws-col" style="width:106px;">
-                    <div class="org-box ob-sub-epm" style="width:100%;"><div class="ob-label">SI PM (EPM)</div><div class="ob-sub">System Integrator Lead</div></div>
+                    <div class="org-box ob-sipm-epm si-pm-role" style="width:100%;"><div class="ob-label">SI PM (EPM)</div><div class="ob-sub">System Integrator Lead</div></div>
                     <div class="vline" style="height:9px;"></div>
                     <div class="org-box ob-si-epm" style="width:100%;"><div class="ob-label">Functional Consultant</div><div class="ob-sub">SI · EPM Config</div></div>
                     <div class="vline" style="height:9px;"></div>
@@ -309,7 +361,7 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
               </div>
 
               <!-- ADP LYRIC -->
-              <div class="ws-col" style="width:240px;">
+              <div id="ws-col-adp" class="ws-col" style="width:240px;">
                 <div class="org-box ob-adp-ws" style="width:100%;"><div class="ob-label">ADP Lyric Workstream</div><div class="ob-sub">HCM / Payroll / Recruiting/Talent</div></div>
                 <div style="position:relative;height:22px;width:220px;">
                   <div style="position:absolute;top:0;left:50%;width:2px;height:8px;background:#cbd5e1;transform:translateX(-50%);"></div>
@@ -318,28 +370,34 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
                   <div style="position:absolute;top:8px;right:10%;width:2px;height:14px;background:#cbd5e1;"></div>
                 </div>
                 <div style="display:flex;gap:8px;margin-top:22px;align-items:flex-start;">
-                  <div class="org-box ob-rsh-adp" style="width:106px;"><div class="ob-label">HCM Team</div><div class="ob-sub">RS&amp;H · HCM</div></div>
-                  <div class="org-box ob-adp-role" style="width:106px;"><div class="ob-label">ADP Implementation Team</div><div class="ob-sub">ADP · Lyric Delivery</div></div>
+                  <div class="ws-col" style="width:106px;">
+                    <div class="org-box ob-rsh-adp" style="width:100%;"><div class="ob-label">HCM Team</div><div class="ob-sub">RS&amp;H · HCM</div></div>
+                    <div class="vline" style="height:9px;"></div>
+                    <div class="org-box ob-func-adp" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · HCM SME</div></div>
+                  </div>
+                  <div class="ws-col" style="width:106px;">
+                    <div class="org-box ob-sipm-adp si-pm-role" style="width:100%;"><div class="ob-label">ADP Impl. Lead</div><div class="ob-sub">ADP · Lyric Delivery</div></div>
+                  </div>
                 </div>
               </div>
 
             </div><!-- /ws-row -->
-          </div><!-- /left org -->
+          </div><!-- /right org (Technology) -->
 
-          <!-- RIGHT: PROCESS & CHANGE MANAGEMENT -->
-          <div style="display:flex;flex-direction:column;align-items:center;width:400px;padding:0 0 0 20px;">
+          <!-- LEFT: ENTERPRISE / BUSINESS TRANSFORMATION -->
+          <div style="display:flex;flex-direction:column;align-items:center;width:590px;padding:0 20px 0 0;border-right:2px solid #cbd5e1;">
 
-            <div class="org-box ob-bpo">
-              <div class="ob-label">Business Process Owner</div>
-              <div class="ob-sub">RS&amp;H</div>
+            <div class="org-box ob-enterprise-node">
+              <div class="ob-label">Enterprise</div>
+              <div class="ob-sub">RS&amp;H · Strategy &amp; Transformation</div>
             </div>
-
-            <!-- Fork to Process Team + Change Lead -->
-            <div style="position:relative;height:22px;width:350px;margin-top:18px;">
+            <!-- Fork to Process Team + Change Lead + Enterprise Program Governance -->
+            <div style="position:relative;height:22px;width:552px;margin-top:0;">
               <div style="position:absolute;top:0;left:50%;width:2px;height:8px;background:#cbd5e1;transform:translateX(-50%);"></div>
-              <div style="position:absolute;top:8px;left:10%;right:10%;height:2px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:8px;left:10%;width:2px;height:14px;background:#cbd5e1;"></div>
-              <div style="position:absolute;top:8px;right:10%;width:2px;height:14px;background:#cbd5e1;"></div>
+              <div style="position:absolute;top:8px;left:15%;right:15%;height:2px;background:#cbd5e1;"></div>
+              <div style="position:absolute;top:8px;left:15%;width:2px;height:14px;background:#cbd5e1;"></div>
+              <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:2px;height:14px;background:#cbd5e1;"></div>
+              <div style="position:absolute;top:8px;right:15%;width:2px;height:14px;background:#cbd5e1;"></div>
             </div>
 
             <div style="display:flex;gap:12px;margin-top:22px;align-items:flex-start;">
@@ -374,20 +432,53 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
                 </div>
               </div>
 
-            </div><!-- /two branches -->
+              <!-- Enterprise Program Governance branch -->
+              <div class="ws-col" style="width:163px;">
+                <div id="epg-box" class="org-box ob-epg" style="width:100%;"><div class="ob-label">Enterprise Program Governance</div><div class="ob-sub">PMO Standards &amp; Oversight</div></div>
+                <div class="vline" style="height:16px;margin-top:16px;"></div>
+                <div id="rsh-epmo-box" class="org-box ob-owner" style="width:100%;"><div class="ob-label">RS&amp;H ePMO</div><div class="ob-sub">RS&amp;H · Enterprise PMO</div></div>
+              </div>
+
+            </div><!-- /three branches -->
           </div><!-- /right org -->
 
         </div><!-- /two orgs -->
         </div><!-- /fixed 1500px wrapper -->
 
         <!-- Legend -->
-        <div style="margin-top:24px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--muted);">
-          <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:20px;border-top:2px solid #cbd5e1;"></span> Reporting line</span>
-          <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:20px;border-top:2px dashed #94a3b8;"></span> Advisory / Peer</span>
-          <span style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:3px;"></div> RS&amp;H</span>
-          <span style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:12px;background:#eff6ff;border:1.5px solid #93c5fd;border-radius:3px;"></div> SI Technology</span>
-          <span style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:12px;background:#fefce8;border:1.5px solid #ca8a04;border-radius:3px;"></div> Hackett</span>
-          <span style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:12px;background:#fff7ed;border:1.5px solid #fb923c;border-radius:3px;"></div> ADP</span>
+        <div style="margin-top:28px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 20px;display:flex;flex-direction:column;gap:12px;max-width:900px;margin-left:auto;margin-right:auto;">
+          <!-- Row 1: Connector types -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-right:6px;min-width:70px;">Connections</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;margin-right:14px;"><span style="display:inline-block;width:24px;border-top:2px solid #94a3b8;"></span> Reporting Line</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;margin-right:14px;"><span style="display:inline-block;width:24px;border-top:2px dashed #94a3b8;"></span> Advisory / Peer</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#5b21b6;margin-right:14px;"><svg width="24" height="10" style="overflow:visible;"><line x1="0" y1="5" x2="24" y2="5" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#leg-arr)"/><defs><marker id="leg-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0,6 3,0 6" fill="#7c3aed"/></marker></defs></svg> Governance Coordination</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;"><span style="display:inline-block;border:2px solid #0f172a;border-radius:4px;width:22px;height:13px;"></span> PMO Boundary</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#475569;"><span style="display:inline-block;border:3px solid #0f172a;border-radius:4px;width:22px;height:13px;"></span> PM Role</span>
+          </div>
+          <!-- Divider -->
+          <div style="border-top:1px solid #e2e8f0;"></div>
+          <!-- Row 2: Entity types -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-right:6px;min-width:70px;">Entity Type</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#0f2744;border-radius:3px;"></div> RS&amp;H (Owner)</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#dbeafe;border:2px solid #2563eb;border-radius:3px;"></div> RS&amp;H (Functional)</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#eff6ff;border:1.5px solid #93c5fd;border-radius:3px;"></div> System Integrator (SI)</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#fefce8;border:1.5px solid #ca8a04;border-radius:3px;"></div> Hackett Group</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;"><div style="width:13px;height:13px;background:#fff7ed;border:1.5px solid #fb923c;border-radius:3px;"></div> ADP</span>
+          </div>
+          <!-- Divider -->
+          <div style="border-top:1px solid #e2e8f0;"></div>
+          <!-- Row 3: Workstream colors -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-right:6px;min-width:70px;">Workstreams</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#2563eb;border-radius:3px;"></div> ERP — Core Financials &amp; Projects</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#7c3aed;border-radius:3px;"></div> CRM — Sales / Service / Mktg</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#059669;border-radius:3px;"></div> EPM — Planning &amp; Budgeting</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#ea580c;border-radius:3px;"></div> ADP Lyric — HCM &amp; Payroll</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;margin-right:14px;"><div style="width:13px;height:13px;background:#0f766e;border-radius:3px;"></div> Change Management</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:#1e293b;"><div style="width:13px;height:13px;background:#4338ca;border-radius:3px;"></div> Enterprise Program Governance</span>
+          </div>
         </div>
 
       </div><!-- /min-width wrapper -->
@@ -463,6 +554,388 @@ input[type=range]{width:100%;cursor:pointer;height:4px;}
   </div>
 </div>
 
+<!-- PMO ENGAGEMENT -->
+<div class="panel" id="tab-pmophase">
+
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#0f2744 0%,#1a3a5c 60%,#1e4976 100%);border-radius:10px;padding:18px 24px;margin-bottom:18px;color:#fff;">
+    <div style="font-size:15px;font-weight:800;letter-spacing:-.2px;">Hackett PMO Engagement Model</div>
+    <div style="font-size:11.5px;opacity:.7;margin-top:4px;">PMO support model designed to support full enterprise transformation · CRM / ERP / EPM / CLM / HCM &nbsp;·&nbsp; Phase 0 &amp; Phase 1 Focus</div>
+  </div>
+
+  <!-- Phase 0 + Phase 1 cards -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+
+    <!-- PHASE 0 -->
+    <div style="border:2.5px solid #16a34a;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="background:#0f2744;color:#fff;padding:16px 20px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:#86efac;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">⬤ Initial Focus</div>
+        <div style="font-size:15px;font-weight:800;">Phase 0: Enterprise Program Initiation</div>
+        <div style="font-size:11px;opacity:.65;margin-top:4px;">Months 1 – 4</div>
+      </div>
+
+      <!-- Scope -->
+      <div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;flex:1;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-bottom:10px;">Phase Scope &amp; Responsibilities</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Program Setup &amp; Governance:</span> Guide and validate governance frameworks, establish program and project charters, define roles and decision structures</div>
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Performance Metrics:</span> Recommend key, measurable metrics aligned to company and project specific objectives</div>
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Implementation Planning &amp; Strategy:</span> Assess and validate strategy, scope, and implementation plan; synergize workstreams and define readiness criteria for implementations</div>
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Agentic AI Accelerator:</span> Define AI agent design for program monitoring &amp; reporting</div>
+        </div>
+      </div>
+
+      <!-- Deliverables -->
+      <div style="padding:14px 18px;background:#f0fdf4;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#15803d;margin-bottom:8px;">Phase Deliverables</div>
+        <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:5px;">
+          <li style="font-size:11.5px;color:#166534;">RACI for program roles &amp; responsibilities</li>
+          <li style="font-size:11.5px;color:#166534;">Program KPIs and Reporting (incl. RAID, financials)</li>
+          <li style="font-size:11.5px;color:#166534;">Advise implementation strategy &amp; plan</li>
+          <li style="font-size:11.5px;color:#166534;">Readiness Assessments &amp; PMO Playbook</li>
+        </ul>
+      </div>
+
+      <!-- Org alignment -->
+      <div style="padding:12px 18px;background:#dcfce7;border-top:1px solid #bbf7d0;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#15803d;margin-bottom:7px;">Org Chart Alignment</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">
+          <span style="background:#0f2744;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">Program Manager</span>
+          <span style="background:#4338ca;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">Enterprise Program Governance</span>
+          <span style="background:#0f2744;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">RS&amp;H ePMO</span>
+          <span style="background:#020617;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">Exec. Steering Committee</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div style="border:2px solid #2563eb;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="background:#0f2744;color:#fff;padding:16px 20px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:#93c5fd;text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;">⬤ Enterprise &amp; System Specific Support</div>
+        <div style="font-size:15px;font-weight:800;">Phase 1: Design Advisory &amp; Governance</div>
+        <div style="font-size:11px;opacity:.65;margin-top:4px;">Months 5 – 9</div>
+      </div>
+
+      <!-- Scope -->
+      <div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;flex:1;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-bottom:10px;">Phase Scope &amp; Responsibilities</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Functional &amp; Technology Advisory:</span> Provide functional and industry expertise; act as a technology architecture review board across all workstreams</div>
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Requirements Validation:</span> Validate design and solutions against requirements and leading practices; drive adherence to clean core design while accommodating BU-specific business needs</div>
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Agentic PMO Deployment:</span> Deploy agentic solution and begin leveraging for reporting and monitoring</div>
+          <div style="font-size:11.5px;color:#1e293b;line-height:1.55;"><span style="font-weight:700;">Executive Level Program Health Insights:</span> Provide leadership level insights for risk elevation and health reporting / status management</div>
+        </div>
+      </div>
+
+      <!-- Deliverables -->
+      <div style="padding:14px 18px;background:#eff6ff;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#1d4ed8;margin-bottom:8px;">Phase Deliverables</div>
+        <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:5px;">
+          <li style="font-size:11.5px;color:#1e40af;">Review of design decisions and solutions</li>
+          <li style="font-size:11.5px;color:#1e40af;">Supplemental design / decisioning documentation</li>
+          <li style="font-size:11.5px;color:#1e40af;">Technology Architectural Summaries</li>
+          <li style="font-size:11.5px;color:#1e40af;">PMO Agent deployed in production</li>
+        </ul>
+      </div>
+
+      <!-- Org alignment -->
+      <div style="padding:12px 18px;background:#dbeafe;border-top:1px solid #bfdbfe;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#1d4ed8;margin-bottom:7px;">Org Chart Alignment</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">
+          <span style="background:#2563eb;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">SI PM — ERP</span>
+          <span style="background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">SI PM — CRM</span>
+          <span style="background:#059669;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">SI PM — EPM</span>
+          <span style="background:#4338ca;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">Enterprise Program Governance</span>
+          <span style="background:#020617;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;">Exec. Steering Committee</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ongoing Activities -->
+  <div class="card">
+    <div class="card-title">Ongoing Activities <span>Sustained across Phase 0 &amp; Phase 1</span></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+      <div style="background:#f1f5f9;border-radius:8px;padding:13px 12px;">
+        <div style="font-size:11px;font-weight:800;color:#0f2744;margin-bottom:5px;">Program Monitoring</div>
+        <div style="font-size:11px;color:#475569;line-height:1.5;">Independent, executive level status validation and health reporting assurance</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:13px 12px;">
+        <div style="font-size:11px;font-weight:800;color:#0f2744;margin-bottom:5px;">Delivery Guidance</div>
+        <div style="font-size:11px;color:#475569;line-height:1.5;">Assess priorities, scope, and resourcing across workstreams</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:13px 12px;">
+        <div style="font-size:11px;font-weight:800;color:#0f2744;margin-bottom:5px;">Performance Insights</div>
+        <div style="font-size:11px;color:#475569;line-height:1.5;">Analyze metrics to track progress, labor costs, and value realization</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:13px 12px;">
+        <div style="font-size:11px;font-weight:800;color:#0f2744;margin-bottom:5px;">Risk Management</div>
+        <div style="font-size:11px;color:#475569;line-height:1.5;">Identify risks proactively and recommend mitigation actions to leadership</div>
+      </div>
+      <div style="background:#0f2744;border-radius:8px;padding:13px 12px;">
+        <div style="font-size:11px;font-weight:800;color:#93c5fd;margin-bottom:5px;">AI-Enabled PMO</div>
+        <div style="font-size:11px;color:#cbd5e1;line-height:1.5;">Leverage AI-enabled tools to enhance visibility and decision-making</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engagement matrix -->
+  <div class="card">
+    <div class="card-title">Hackett PMO Engagement Intensity by Org Role</div>
+    <div style="overflow-x:auto;">
+      <table class="rtable">
+        <thead>
+          <tr>
+            <th style="min-width:200px;">Hackett PMO Activity</th>
+            <th class="ac">Exec Steering</th>
+            <th class="ac">Program Manager</th>
+            <th class="ac">Enterprise Prog Gov</th>
+            <th class="ac">RS&amp;H ePMO</th>
+            <th class="ac">SI PMs (per WS)</th>
+            <th class="ac">Tech Teams</th>
+            <th class="ac">Change Mgmt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sec-hdr" style=""><td colspan="8" style="background:#15803d;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 11px;">Phase 0 — Enterprise Program Initiation (Months 1–4)</td></tr>
+          <tr><td style="font-weight:600;">Program Setup &amp; Governance</td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td></tr>
+          <tr><td style="font-weight:600;">Performance Metrics</td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td></tr>
+          <tr><td style="font-weight:600;">Implementation Planning &amp; Strategy</td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td></tr>
+          <tr><td style="font-weight:600;">Agentic AI Accelerator</td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td></tr>
+          <tr class="sec-hdr"><td colspan="8" style="background:#1d4ed8;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 11px;">Phase 1 — Design Advisory &amp; Governance (Months 5–9)</td></tr>
+          <tr><td style="font-weight:600;">Functional &amp; Technology Advisory</td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td></tr>
+          <tr><td style="font-weight:600;">Requirements Validation</td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td></tr>
+          <tr><td style="font-weight:600;">Agentic PMO Deployment</td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td></tr>
+          <tr><td style="font-weight:600;">Executive Program Health Insights</td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#1d4ed8;font-weight:800;">P</span></td><td class="ac"><span style="color:#d97706;font-weight:700;">A</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td><td class="ac"><span style="color:#94a3b8;">I</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:18px;font-size:11px;color:var(--muted);">
+      <span><strong style="color:#1d4ed8;">P</strong> = Primary engagement</span>
+      <span><strong style="color:#d97706;">A</strong> = Advisory / support</span>
+      <span><strong style="color:#94a3b8;">I</strong> = Informed</span>
+    </div>
+  </div>
+
+  <!-- PMO PHASE ORG CHART -->
+  <div class="card">
+    <div class="card-title">PMO Engagement Org Chart <span>Hackett PMO organizational engagement — toggle phase view</span></div>
+
+    <!-- Phase toggle -->
+    <div style="display:flex;gap:8px;margin-bottom:22px;">
+      <button id="pmobtn-0" onclick="switchPmoPhase(0)" style="padding:7px 18px;border-radius:6px;border:2px solid transparent;cursor:pointer;font-size:12px;font-weight:700;background:#15803d;color:#fff;transition:all .18s;">● Phase 0: Enterprise Program Initiation</button>
+      <button id="pmobtn-1" onclick="switchPmoPhase(1)" style="padding:7px 18px;border-radius:6px;border:2px solid #e2e8f0;cursor:pointer;font-size:12px;font-weight:700;background:#f1f5f9;color:#64748b;transition:all .18s;">Phase 1: Design Advisory &amp; Governance</button>
+    </div>
+
+    <!-- ── PHASE 0 ── -->
+    <div id="pmo-org-0" class="org-wrap" style="display:block;">
+      <div style="min-width:860px;">
+
+        <!-- ESC -->
+        <div style="display:flex;justify-content:center;">
+          <div class="org-box ob-esc"><div class="ob-label">Executive Steering Committee</div><div class="ob-sub">Governance Sponsor</div></div>
+        </div>
+        <div class="vline" style="height:20px;"></div>
+
+        <!-- Hackett PMO — central Phase 0 actor -->
+        <div style="display:flex;justify-content:center;">
+          <div style="position:relative;">
+            <div class="org-box ob-hackett" style="min-width:210px;padding:13px 20px;border:3px solid #0f172a;">
+              <div class="ob-label" style="font-size:12px;">Hackett PMO</div>
+              <div class="ob-sub">Phase 0 · Primary Governance Lead</div>
+            </div>
+            <!-- RS&H ePMO peer arrow right -->
+            <div style="position:absolute;left:100%;top:50%;transform:translateY(-50%);display:flex;align-items:center;margin-left:4px;">
+              <svg width="46" height="14" style="overflow:visible;flex-shrink:0;">
+                <defs>
+                  <marker id="p0r" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#4338ca"/></marker>
+                  <marker id="p0l" markerWidth="7" markerHeight="7" refX="1" refY="3.5" orient="auto"><polygon points="7 0,0 3.5,7 7" fill="#4338ca"/></marker>
+                </defs>
+                <line x1="2" y1="7" x2="44" y2="7" stroke="#4338ca" stroke-width="1.5" stroke-dasharray="4,3" marker-start="url(#p0l)" marker-end="url(#p0r)"/>
+              </svg>
+              <div class="org-box ob-owner" style="min-width:145px;white-space:nowrap;margin-left:4px;">
+                <div class="ob-label">RS&amp;H ePMO</div>
+                <div class="ob-sub">RS&amp;H · Enterprise PMO</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fork: Program Manager | Enterprise Program Gov -->
+        <div style="position:relative;height:22px;width:520px;margin:0 auto;">
+          <div style="position:absolute;top:0;left:50%;width:2px;height:10px;background:#cbd5e1;transform:translateX(-50%);"></div>
+          <div style="position:absolute;top:10px;left:18%;right:18%;height:2px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;left:18%;width:2px;height:12px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;right:18%;width:2px;height:12px;background:#cbd5e1;"></div>
+        </div>
+
+        <div style="display:flex;justify-content:center;gap:36px;align-items:flex-start;">
+
+          <!-- Program Manager branch -->
+          <div class="ws-col" style="width:230px;">
+            <div class="org-box ob-pgm pm-role" style="width:100%;">
+              <div class="ob-label">Program Manager</div>
+              <div class="ob-sub">RS&amp;H · Portfolio Oversight</div>
+            </div>
+            <div class="vline" style="height:12px;"></div>
+            <div class="org-box ob-support" style="width:100%;">
+              <div class="ob-label">Project Administrator</div>
+              <div class="ob-sub">RS&amp;H</div>
+            </div>
+            <div class="vline" style="height:12px;"></div>
+            <div style="background:#f0fdf4;border:1.5px solid #16a34a;border-radius:8px;padding:10px 12px;width:100%;">
+              <div style="font-size:9px;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;">Phase 0 Engagement</div>
+              <div style="font-size:10.5px;color:#166534;line-height:1.6;">· Implementation strategy &amp; plan<br>· Program scheduling &amp; RAID<br>· KPI framework setup<br>· Readiness criteria definition</div>
+            </div>
+          </div>
+
+          <!-- Enterprise Program Governance branch -->
+          <div class="ws-col" style="width:230px;">
+            <div class="org-box ob-epg" style="width:100%;">
+              <div class="ob-label">Enterprise Program Governance</div>
+              <div class="ob-sub">PMO Standards &amp; Oversight</div>
+            </div>
+            <div class="vline" style="height:12px;"></div>
+            <div style="background:#f0fdf4;border:1.5px solid #16a34a;border-radius:8px;padding:10px 12px;width:100%;">
+              <div style="font-size:9px;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;">Phase 0 Engagement</div>
+              <div style="font-size:10.5px;color:#166534;line-height:1.6;">· Governance frameworks &amp; charters<br>· RACI establishment<br>· PMO playbook &amp; tooling<br>· Performance metrics design<br>· Agentic AI agent design</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workstreams: Informed -->
+        <div style="margin-top:26px;padding:12px 18px;background:#f8fafc;border:1.5px dashed #cbd5e1;border-radius:8px;max-width:740px;margin-left:auto;margin-right:auto;">
+          <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#94a3b8;text-align:center;margin-bottom:10px;">Workstreams — Informed in Phase 0 (Readiness Criteria Defined)</div>
+          <div style="display:flex;gap:10px;justify-content:center;">
+            <div class="org-box ob-erp" style="opacity:.45;min-width:130px;"><div class="ob-label" style="font-size:9px;">ERP Workstream</div></div>
+            <div class="org-box ob-crm" style="opacity:.45;min-width:130px;"><div class="ob-label" style="font-size:9px;">CRM Workstream</div></div>
+            <div class="org-box ob-epm" style="opacity:.45;min-width:130px;"><div class="ob-label" style="font-size:9px;">EPM Workstream</div></div>
+            <div class="org-box ob-adp-ws" style="opacity:.45;min-width:130px;"><div class="ob-label" style="font-size:9px;">ADP Lyric Workstream</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── PHASE 1 ── -->
+    <div id="pmo-org-1" class="org-wrap" style="display:none;">
+      <div style="min-width:1080px;">
+
+        <!-- ESC -->
+        <div style="display:flex;justify-content:center;">
+          <div class="org-box ob-esc"><div class="ob-label">Executive Steering Committee</div><div class="ob-sub">Health Insights Recipient</div></div>
+        </div>
+        <div class="vline" style="height:20px;"></div>
+
+        <!-- Hackett PMO -->
+        <div style="display:flex;justify-content:center;">
+          <div style="position:relative;">
+            <div class="org-box ob-hackett" style="min-width:210px;padding:13px 20px;border:3px solid #0f172a;">
+              <div class="ob-label" style="font-size:12px;">Hackett PMO</div>
+              <div class="ob-sub">Phase 1 · Design Advisory &amp; Governance</div>
+            </div>
+            <!-- EPG + ePMO stacked right -->
+            <div style="position:absolute;left:100%;top:50%;transform:translateY(-50%);display:flex;align-items:center;margin-left:4px;">
+              <svg width="46" height="14" style="overflow:visible;flex-shrink:0;">
+                <defs>
+                  <marker id="p1r" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#4338ca"/></marker>
+                  <marker id="p1l" markerWidth="7" markerHeight="7" refX="1" refY="3.5" orient="auto"><polygon points="7 0,0 3.5,7 7" fill="#4338ca"/></marker>
+                </defs>
+                <line x1="2" y1="7" x2="44" y2="7" stroke="#4338ca" stroke-width="1.5" stroke-dasharray="4,3" marker-start="url(#p1l)" marker-end="url(#p1r)"/>
+              </svg>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-left:4px;">
+                <div class="org-box ob-epg" style="min-width:168px;white-space:nowrap;"><div class="ob-label">Enterprise Program Gov</div><div class="ob-sub">PMO Standards &amp; Oversight</div></div>
+                <div class="org-box ob-owner" style="min-width:168px;white-space:nowrap;"><div class="ob-label">RS&amp;H ePMO</div><div class="ob-sub">RS&amp;H · Enterprise PMO</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fork to 4 SI PMs -->
+        <div style="position:relative;height:22px;width:980px;margin:0 auto;">
+          <div style="position:absolute;top:0;left:50%;width:2px;height:10px;background:#cbd5e1;transform:translateX(-50%);"></div>
+          <div style="position:absolute;top:10px;left:6%;right:6%;height:2px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;left:6%;width:2px;height:12px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;left:35%;width:2px;height:12px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;left:65%;width:2px;height:12px;background:#cbd5e1;"></div>
+          <div style="position:absolute;top:10px;right:6%;width:2px;height:12px;background:#cbd5e1;"></div>
+        </div>
+
+        <!-- 4 workstream columns -->
+        <div style="display:flex;justify-content:center;gap:14px;align-items:flex-start;">
+
+          <!-- ERP -->
+          <div class="ws-col" style="width:215px;">
+            <div class="org-box ob-erp" style="width:100%;"><div class="ob-label">ERP Workstream</div><div class="ob-sub">Core Financials &amp; Projects</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-sipm-erp si-pm-role" style="width:100%;"><div class="ob-label">SI PM (ERP)</div><div class="ob-sub">System Integrator Lead</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-rsh-erp" style="width:100%;"><div class="ob-label">Technology Team</div><div class="ob-sub">RS&amp;H · ERP</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-func-erp" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · ERP SME</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div style="background:#eff6ff;border:1.5px solid #2563eb;border-radius:8px;padding:9px 11px;width:100%;">
+              <div style="font-size:9px;font-weight:800;color:#1d4ed8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Hackett Advisory</div>
+              <div style="font-size:10px;color:#1e40af;line-height:1.6;">· Architecture review board<br>· Requirements validation<br>· Design decision review<br>· Health reporting</div>
+            </div>
+          </div>
+
+          <!-- CRM -->
+          <div class="ws-col" style="width:215px;">
+            <div class="org-box ob-crm" style="width:100%;"><div class="ob-label">CRM Workstream</div><div class="ob-sub">Sales / Service / Mktg</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-sipm-crm si-pm-role" style="width:100%;"><div class="ob-label">SI PM (CRM)</div><div class="ob-sub">System Integrator Lead</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-rsh-crm" style="width:100%;"><div class="ob-label">Technology Team</div><div class="ob-sub">RS&amp;H · CRM</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-func-crm" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · CRM SME</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div style="background:#f5f3ff;border:1.5px solid #7c3aed;border-radius:8px;padding:9px 11px;width:100%;">
+              <div style="font-size:9px;font-weight:800;color:#5b21b6;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Hackett Advisory</div>
+              <div style="font-size:10px;color:#3b0764;line-height:1.6;">· Architecture review board<br>· Requirements validation<br>· Design decision review<br>· Health reporting</div>
+            </div>
+          </div>
+
+          <!-- EPM -->
+          <div class="ws-col" style="width:215px;">
+            <div class="org-box ob-epm" style="width:100%;"><div class="ob-label">EPM Workstream</div><div class="ob-sub">Planning &amp; Budgeting</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-sipm-epm si-pm-role" style="width:100%;"><div class="ob-label">SI PM (EPM)</div><div class="ob-sub">System Integrator Lead</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-rsh-epm" style="width:100%;"><div class="ob-label">Technology Team</div><div class="ob-sub">RS&amp;H · EPM</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-func-epm" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · EPM SME</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div style="background:#f0fdf4;border:1.5px solid #059669;border-radius:8px;padding:9px 11px;width:100%;">
+              <div style="font-size:9px;font-weight:800;color:#065f46;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Hackett Advisory</div>
+              <div style="font-size:10px;color:#064e3b;line-height:1.6;">· Architecture review board<br>· Requirements validation<br>· Design decision review<br>· Health reporting</div>
+            </div>
+          </div>
+
+          <!-- ADP -->
+          <div class="ws-col" style="width:215px;">
+            <div class="org-box ob-adp-ws" style="width:100%;"><div class="ob-label">ADP Lyric Workstream</div><div class="ob-sub">HCM &amp; Payroll</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-sipm-adp si-pm-role" style="width:100%;"><div class="ob-label">ADP Impl. Lead</div><div class="ob-sub">ADP · Lyric Delivery</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-rsh-adp" style="width:100%;"><div class="ob-label">HCM Team</div><div class="ob-sub">RS&amp;H · HCM</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div class="org-box ob-func-adp" style="width:100%;"><div class="ob-label">Functional Lead</div><div class="ob-sub">RS&amp;H · HCM SME</div></div>
+            <div class="vline" style="height:10px;"></div>
+            <div style="background:#fff7ed;border:1.5px solid #ea580c;border-radius:8px;padding:9px 11px;width:100%;">
+              <div style="font-size:9px;font-weight:800;color:#9a3412;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Hackett Advisory</div>
+              <div style="font-size:10px;color:#7c2d12;line-height:1.6;">· HCM requirements review<br>· Deployment readiness<br>· Agentic PMO leveraged<br>· Health reporting</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
 </div>
 
 <script>
@@ -482,18 +955,21 @@ const RESOURCES=[
    desc:'Manages scheduling, meeting coordination, action item tracking, and document management across all workstreams.'},
   // ERP
   {id:'erp_pm',role:'SI PM (ERP)',cat:'ERP',type:'SI',alloc:[100,100,100,100,75],desc:'System Integrator PM accountable for ERP workstream delivery — sprint planning, SI resourcing, and ERP governance with RS&H.'},
+  {id:'erp_fl',role:'Functional Lead (ERP)',cat:'ERP',type:'RS&H',alloc:[50,100,100,100,75],desc:'RS&H subject matter expert for ERP functional areas. Leads business requirements, fit-gap validation, UAT coordination, and post-go-live adoption for ERP modules.'},
   {id:'erp_tl',role:'Technology Team (ERP)',cat:'ERP',type:'RS&H',alloc:[50,100,100,75,50],desc:'RS&H technical authority for ERP. Oversees data, integration, and architecture across the ERP workstream. Reviews integration designs, data migration approach, and security architecture.'},
   {id:'erp_fc',role:'Functional Consultant (ERP)',cat:'ERP',type:'SI',alloc:[25,100,100,75,25],desc:'Configures ERP modules (Financials, SCM, HCM). Leads fit-gap analysis and functional testing.'},
   {id:'erp_id',role:'Integration Developer (ERP)',cat:'ERP',type:'SI',alloc:[0,75,100,100,50],desc:'Develops OIC connections and APIs for ERP. Responsible for integration testing.'},
   {id:'erp_dm',role:'Data Migration Lead (ERP)',cat:'ERP',type:'SI',alloc:[25,75,100,100,25],desc:'Manages data extraction, transformation, and load (ETL) for ERP. Oversees data quality and cutover activities.'},
   // CRM
   {id:'crm_pm',role:'SI PM (CRM)',cat:'CRM',type:'SI',alloc:[100,100,100,100,75],desc:'System Integrator PM accountable for CRM workstream delivery and CRM governance with RS&H.'},
+  {id:'crm_fl',role:'Functional Lead (CRM)',cat:'CRM',type:'RS&H',alloc:[50,100,100,100,75],desc:'RS&H subject matter expert for CRM functional areas. Leads business requirements, fit-gap validation, UAT coordination, and post-go-live adoption for CRM modules.'},
   {id:'crm_tl',role:'Technology Team (CRM)',cat:'CRM',type:'RS&H',alloc:[50,100,100,75,50],desc:'RS&H technical authority for CRM. Oversees data, integration, and architecture across the CRM workstream. Manages ERP/CRM integration design, data model, and API architecture.'},
   {id:'crm_fc',role:'Functional Consultant (CRM)',cat:'CRM',type:'SI',alloc:[25,100,100,75,25],desc:'Configures CRM modules (Sales, Service, Marketing). Leads fit-gap analysis and functional testing.'},
   {id:'crm_id',role:'Integration Developer (CRM)',cat:'CRM',type:'SI',alloc:[0,75,100,100,50],desc:'Develops integrations between CRM and other enterprise systems.'},
   {id:'crm_dm',role:'Data Migration Lead (CRM)',cat:'CRM',type:'SI',alloc:[25,75,100,100,25],desc:'Manages data migration for CRM (accounts, contacts, opportunities). Oversees data quality and cutover.'},
   // EPM
   {id:'epm_pm',role:'SI PM (EPM)',cat:'EPM',type:'SI',alloc:[100,100,100,100,75],desc:'System Integrator PM accountable for EPM workstream delivery and EPM governance with RS&H.'},
+  {id:'epm_fl',role:'Functional Lead (EPM)',cat:'EPM',type:'RS&H',alloc:[50,100,100,100,75],desc:'RS&H subject matter expert for EPM functional areas. Leads planning model requirements, fit-gap validation, UAT coordination, and post-go-live adoption for EPM modules.'},
   {id:'epm_tl',role:'Technology Team (EPM)',cat:'EPM',type:'RS&H',alloc:[50,100,100,75,50],desc:'RS&H technical authority for EPM. Oversees data, integration, and architecture for the EPM workstream. Manages financial data integration from ERP to EPM and planning model architecture.'},
   {id:'epm_fc',role:'Functional Consultant (EPM)',cat:'EPM',type:'SI',alloc:[25,100,100,75,25],desc:'Configures EPM modules (Planning, Budgeting, Forecasting, Close). Leads model design and functional testing.'},
   {id:'epm_id',role:'Integration Developer (EPM)',cat:'EPM',type:'SI',alloc:[0,75,100,100,50],desc:'Develops data pipelines between ERP and EPM for financial reporting and planning.'},
@@ -501,6 +977,8 @@ const RESOURCES=[
   // ADP Lyric
   {id:'adp_bt',role:'HCM Team',cat:'ADP',type:'RS&H',alloc:[50,100,100,100,75],
    desc:'RS&H HCM team supporting ADP Lyric HCM/Payroll implementation. Provides process requirements, subject matter expertise, and drives RS&H business readiness for go-live.'},
+  {id:'adp_fl',role:'Functional Lead (ADP)',cat:'ADP',type:'RS&H',alloc:[50,100,100,100,75],
+   desc:'RS&H HCM subject matter expert for ADP Lyric. Leads HCM/Payroll business requirements, fit-gap validation, UAT coordination, and post-go-live adoption.'},
   {id:'adp_impl',role:'ADP Implementation Team',cat:'ADP',type:'ADP',alloc:[100,100,100,100,75],
    desc:'ADP implementation team responsible for Lyric HCM/Payroll configuration, integrations, and deployment. Accountable for ADP workstream technical delivery and quality.'},
   // Process & Change
@@ -514,6 +992,9 @@ const RESOURCES=[
    desc:'Part of the Process Team, reports to Business Process Owner. Documents current-state and future-state business processes, performs gap analysis, and supports UAT across all workstreams.'},
   {id:'hackett_pt',role:'Hackett Process Team',cat:'Change',type:'Hackett',alloc:[25,75,100,75,25],
    desc:'Hackett Group process team under the Process Team, reports to Business Process Owner. Provides industry benchmarking, best-practice process frameworks, and process design support across all workstreams.'},
+  // Governance
+  {id:'rsh_epmo',role:'RS&H ePMO',cat:'Governance',type:'RS&H',alloc:[100,100,100,100,100],
+   desc:'RS&H Enterprise PMO team under Enterprise Program Governance. Provides program governance frameworks, PMO tooling, project performance benchmarking, cross-program reporting standards, and portfolio-level risk oversight.'},
 ];
 
 const RACI=[
@@ -539,15 +1020,57 @@ const RACI=[
 let scenarioAlloc=RESOURCES.map(r=>[...r.alloc]);
 let sfChart=null,scChart=null;
 
+const WS_ACTIVE={ERP:true,CRM:true,EPM:true,ADP:true};
+function isWsActive(cat){
+  if(cat==='Program'||cat==='Change'||cat==='Governance')return true;
+  return WS_ACTIVE[cat]!==false;
+}
+function toggleWS(ws,btn){
+  WS_ACTIVE[ws]=!WS_ACTIVE[ws];
+  btn.classList.toggle('active',WS_ACTIVE[ws]);
+  const col=document.getElementById('ws-col-'+ws.toLowerCase());
+  const drop=document.getElementById('ws-drop-'+ws.toLowerCase());
+  if(col)col.style.display=WS_ACTIVE[ws]?'':'none';
+  if(drop)drop.style.display=WS_ACTIVE[ws]?'':'none';
+  renderWsConnector();
+  renderStats();
+  renderStaffingChart();
+  renderScenarioControls();
+  renderScenarioChart();
+}
+
+function renderWsConnector(){
+  const ORDER=['ERP','CRM','EPM','ADP'];
+  const visible=ORDER.filter(ws=>WS_ACTIVE[ws]);
+  const N=visible.length;
+  const svg=document.getElementById('ws-connector-svg');
+  if(!svg)return;
+  if(N===0){svg.setAttribute('width','8');svg.innerHTML='';return;}
+  const colW=240,gap=16,step=colW+gap;
+  const totalW=N*colW+(N-1)*gap;
+  const centers=visible.map((_,i)=>i*step+colW/2);
+  const leftX=centers[0],rightX=centers[N-1];
+  const midX=(leftX+rightX)/2;
+  let lines=`<line x1="${midX}" y1="0" x2="${midX}" y2="18" stroke="#cbd5e1" stroke-width="2"/>`;
+  if(N>1){
+    lines+=`<line x1="${leftX}" y1="18" x2="${rightX}" y2="18" stroke="#cbd5e1" stroke-width="2"/>`;
+  }
+  centers.forEach(cx=>{
+    lines+=`<line x1="${cx}" y1="18" x2="${cx}" y2="40" stroke="#cbd5e1" stroke-width="2"/>`;
+  });
+  svg.setAttribute('width',totalW);
+  svg.innerHTML=lines;
+}
+
 function catColor(c){
   if(c==='ERP')return'#2563eb';if(c==='CRM')return'#7c3aed';if(c==='EPM')return'#059669';
-  if(c==='ADP')return'#ea580c';if(c==='Change')return'#0f766e';return'#1a3a5c';
+  if(c==='ADP')return'#ea580c';if(c==='Change')return'#0f766e';if(c==='Governance')return'#4338ca';return'#1a3a5c';
 }
 function typeTag(t){
   if(t==='RS&H')return't-rsh';if(t==='SI')return't-si';if(t==='ADP')return't-adp';if(t==='Hackett')return't-hackett';return't-rsh';
 }
 function allocClass(v){return v>=80?'color:#1d4ed8;font-weight:700':v>=50?'color:#d97706;font-weight:700':v>0?'color:#64748b':'color:#d1d5db';}
-function phaseFTEs(alloc){return PHASES.map((_,pi)=>+(alloc.reduce((a,row)=>a+row[pi],0)/100).toFixed(2));}
+function phaseFTEs(alloc){return PHASES.map((_,pi)=>+(alloc.reduce((a,row,ri)=>isWsActive(RESOURCES[ri].cat)?a+row[pi]:a,0)/100).toFixed(2));}
 function baselineFTEs(){return phaseFTEs(RESOURCES.map(r=>[...r.alloc]));}
 
 function switchTab(id,el){
@@ -561,7 +1084,7 @@ function switchTab(id,el){
 }
 
 function renderRoleDesc(){
-  const catName={Program:'Program',ERP:'ERP',CRM:'CRM',EPM:'EPM',ADP:'ADP Lyric',Change:'Process & Change'};
+  const catName={Program:'Program',ERP:'ERP',CRM:'CRM',EPM:'EPM',ADP:'ADP Lyric',Change:'Process & Change',Governance:'Governance'};
   document.getElementById('roleDescTable').innerHTML=`<thead><tr><th>Role</th><th>Team</th><th>Type</th><th style="min-width:300px">Key Responsibilities</th></tr></thead><tbody>${RESOURCES.map(r=>`<tr><td style="font-weight:600;white-space:nowrap;">${r.role}</td><td style="color:${catColor(r.cat)};font-weight:700;">${catName[r.cat]||r.cat}</td><td><span class="ttag ${typeTag(r.type)}">${r.type}</span></td><td style="color:#475569;font-size:11.5px;">${r.desc}</td></tr>`).join('')}</tbody>`;
 }
 
@@ -573,16 +1096,17 @@ function renderStats(){
     <div class="scard"><div class="sval" style="color:#0f2744">${RESOURCES.length}</div><div class="slbl">Total Roles</div><div class="ssub">${rshC} RS&H · ${siC} SI · ${adpC} ADP · ${hackC} Hackett</div></div>
     <div class="scard"><div class="sval" style="color:#2563eb">${peak.toFixed(1)}</div><div class="slbl">Peak FTEs</div><div class="ssub">Phase ${peakPhase}</div></div>
     <div class="scard"><div class="sval" style="color:#7c3aed">24</div><div class="slbl">Duration (Months)</div><div class="ssub">5 Structured Phases</div></div>
-    <div class="scard"><div class="sval" style="color:#ea580c">4</div><div class="slbl">Workstreams</div><div class="ssub">ERP · CRM · EPM · ADP Lyric</div></div>`;
+    <div class="scard"><div class="sval" style="color:#4338ca">5</div><div class="slbl">Workstreams + Gov</div><div class="ssub">ERP · CRM · EPM · ADP · EPG</div></div>`;
   renderResourceTable();
 }
 
 function renderResourceTable(){
-  const cats=['Program','ERP','CRM','EPM','ADP','Change'];
-  const catLabel={Program:'🎯 Program Level',ERP:'🔷 ERP Workstream',CRM:'🔷 CRM Workstream',EPM:'🔷 EPM Workstream',ADP:'🟠 ADP Lyric Workstream',Change:'🔄 Process & Change Management'};
-  const catSecClass={Program:'sec-pgm',ERP:'sec-erp',CRM:'sec-crm',EPM:'sec-epm',ADP:'sec-adp',Change:'sec-change'};
+  const cats=['Program','ERP','CRM','EPM','ADP','Change','Governance'];
+  const catLabel={Program:'🎯 Program Level',ERP:'🔷 ERP Workstream',CRM:'🔷 CRM Workstream',EPM:'🔷 EPM Workstream',ADP:'🟠 ADP Lyric Workstream',Change:'🔄 Process & Change Management',Governance:'📐 Enterprise Program Governance'};
+  const catSecClass={Program:'sec-pgm',ERP:'sec-erp',CRM:'sec-crm',EPM:'sec-epm',ADP:'sec-adp',Change:'sec-change',Governance:'sec-gov'};
   let html=`<thead><tr><th>Role</th><th>Type</th>${PHASES.map(p=>`<th class="ac">${p.short}<br><span style="font-weight:400;font-size:9.5px;">${p.months}mo</span></th>`).join('')}<th class="ac">Peak</th></tr></thead><tbody>`;
   cats.forEach(cat=>{
+    if(!isWsActive(cat))return;
     html+=`<tr class="sec-hdr ${catSecClass[cat]}"><td colspan="8">${catLabel[cat]}</td></tr>`;
     RESOURCES.filter(r=>r.cat===cat).forEach(r=>{
       const ri=RESOURCES.indexOf(r),a=scenarioAlloc[ri],pk=Math.max(...a);
@@ -597,7 +1121,7 @@ function renderResourceTable(){
 function renderStaffingChart(){
   const months=[],ftEs=[],colors=[];let m=1;
   PHASES.forEach((p,pi)=>{
-    const fte=+(RESOURCES.reduce((a,r,ri)=>a+scenarioAlloc[ri][pi],0)/100).toFixed(2);
+    const fte=+(RESOURCES.reduce((a,r,ri)=>isWsActive(r.cat)?a+scenarioAlloc[ri][pi]:a,0)/100).toFixed(2);
     for(let i=0;i<p.months;i++){months.push('M'+m);ftEs.push(fte);colors.push(p.color+'cc');m++;}
   });
   document.getElementById('phaseLegend').innerHTML=PHASES.map(p=>`<div class="pleg-item"><div class="pleg-dot" style="background:${p.color}"></div><span>${p.label} (${p.months} mo)</span></div>`).join('');
@@ -609,15 +1133,24 @@ function renderStaffingChart(){
 
 function renderGantt(){
   const total=PHASES.reduce((a,p)=>a+p.months,0);
-  const rows=[{label:'Program Office'},{label:'ERP Workstream'},{label:'CRM Workstream'},{label:'EPM Workstream'},{label:'ADP Lyric Workstream'},{label:'Process Team'},{label:'Change Mgmt Lead'}];
+  const rows=[
+    {label:'Program Office'},
+    WS_ACTIVE.ERP&&{label:'ERP Workstream'},
+    WS_ACTIVE.CRM&&{label:'CRM Workstream'},
+    WS_ACTIVE.EPM&&{label:'EPM Workstream'},
+    WS_ACTIVE.ADP&&{label:'ADP Lyric Workstream'},
+    {label:'Process Team'},
+    {label:'Change Mgmt Lead'},
+    {label:'Ent. Program Governance'}
+  ].filter(Boolean);
   document.getElementById('ganttChart').innerHTML=rows.map(row=>`<div class="grow"><div class="glabel">${row.label}</div><div class="gbars">${PHASES.map(p=>{const w=(p.months/total*100).toFixed(1);return`<div class="gbar" style="width:${w}%;background:${p.color}">${p.short}</div>`;}).join('')}</div></div>`).join('');
 }
 
 function renderScenarioControls(){
-  const cats=['Program','ERP','CRM','EPM','ADP','Change'];
-  const titles={Program:'🎯 Program Level',ERP:'🔷 ERP Workstream',CRM:'🔷 CRM Workstream',EPM:'🔷 EPM Workstream',ADP:'🟠 ADP Lyric Workstream',Change:'🔄 Process & Change'};
-  const cls={Program:'sst-pgm',ERP:'sst-erp',CRM:'sst-crm',EPM:'sst-epm',ADP:'sst-adp',Change:'sst-change'};
-  document.getElementById('scenarioControls').innerHTML=cats.map(cat=>`<div class="sc-sec"><div class="sc-sec-title ${cls[cat]}">${titles[cat]}</div>${RESOURCES.filter(r=>r.cat===cat).map(r=>{const ri=RESOURCES.indexOf(r);return`<div class="sc-role"><div class="sc-rname"><span>${r.role}</span><span class="ttag ${typeTag(r.type)}">${r.type}</span></div><div class="sc-sliders">${PHASES.map((p,pi)=>`<div class="sgrp"><div class="slbl2">${p.short}</div><div class="sval2" id="sv-${ri}-${pi}">${scenarioAlloc[ri][pi]}%</div><input type="range" min="0" max="100" step="25" value="${scenarioAlloc[ri][pi]}" style="accent-color:${catColor(cat)}" oninput="updateSc(${ri},${pi},this.value)"></div>`).join('')}</div></div>`;}).join('')}</div>`).join('');
+  const cats=['Program','ERP','CRM','EPM','ADP','Change','Governance'];
+  const titles={Program:'🎯 Program Level',ERP:'🔷 ERP Workstream',CRM:'🔷 CRM Workstream',EPM:'🔷 EPM Workstream',ADP:'🟠 ADP Lyric Workstream',Change:'🔄 Process & Change',Governance:'📐 Enterprise Program Governance'};
+  const cls={Program:'sst-pgm',ERP:'sst-erp',CRM:'sst-crm',EPM:'sst-epm',ADP:'sst-adp',Change:'sst-change',Governance:'sst-gov'};
+  document.getElementById('scenarioControls').innerHTML=cats.filter(cat=>isWsActive(cat)).map(cat=>`<div class="sc-sec"><div class="sc-sec-title ${cls[cat]}">${titles[cat]}</div>${RESOURCES.filter(r=>r.cat===cat).map(r=>{const ri=RESOURCES.indexOf(r);return`<div class="sc-role"><div class="sc-rname"><span>${r.role}</span><span class="ttag ${typeTag(r.type)}">${r.type}</span></div><div class="sc-sliders">${PHASES.map((p,pi)=>`<div class="sgrp"><div class="slbl2">${p.short}</div><div class="sval2" id="sv-${ri}-${pi}">${scenarioAlloc[ri][pi]}%</div><input type="range" min="0" max="100" step="25" value="${scenarioAlloc[ri][pi]}" style="accent-color:${catColor(cat)}" oninput="updateSc(${ri},${pi},this.value)"></div>`).join('')}</div></div>`;}).join('')}</div>`).join('');
 }
 
 function updateSc(ri,pi,val){scenarioAlloc[ri][pi]=+val;document.getElementById(`sv-${ri}-${pi}`).textContent=val+'%';renderScenarioChart();}
@@ -632,7 +1165,7 @@ function renderScenarioChart(){
 
 function renderScenarioSummary(){
   const sc=phaseFTEs(scenarioAlloc),bl=baselineFTEs();
-  const totalDays=scenarioAlloc.reduce((a,row)=>a+row.reduce((b,v,pi)=>b+(v/100)*PHASES[pi].months*22,0),0);
+  const totalDays=scenarioAlloc.reduce((a,row,ri)=>isWsActive(RESOURCES[ri].cat)?a+row.reduce((b,v,pi)=>b+(v/100)*PHASES[pi].months*22,0):a,0);
   const rows=PHASES.map((p,pi)=>{const d=sc[pi]-bl[pi],dcls=d>0?'delta-pos':d<0?'delta-neg':'delta-zero';return`<tr><td style="padding:7px 10px;border-bottom:1px solid #f1f5f9;font-weight:500">${p.label}</td><td style="padding:7px 10px;text-align:center;border-bottom:1px solid #f1f5f9;">${bl[pi].toFixed(1)}</td><td style="padding:7px 10px;text-align:center;border-bottom:1px solid #f1f5f9;font-weight:700;">${sc[pi].toFixed(1)}</td><td style="padding:7px 10px;text-align:center;border-bottom:1px solid #f1f5f9;" class="${dcls}">${d>=0?'+':''}${d.toFixed(1)}</td></tr>`;}).join('');
   const pkBl=Math.max(...bl),pkSc=Math.max(...sc),pkD=pkSc-pkBl;
   document.getElementById('scenarioSummary').innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr style="background:#f8fafc;"><th style="padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);font-size:10.5px;color:var(--muted);text-transform:uppercase;">Phase</th><th style="padding:8px 10px;text-align:center;border-bottom:1px solid var(--border);font-size:10.5px;color:var(--muted);text-transform:uppercase;">Baseline</th><th style="padding:8px 10px;text-align:center;border-bottom:1px solid var(--border);font-size:10.5px;color:var(--muted);text-transform:uppercase;">Scenario</th><th style="padding:8px 10px;text-align:center;border-bottom:1px solid var(--border);font-size:10.5px;color:var(--muted);text-transform:uppercase;">Δ</th></tr></thead><tbody>${rows}<tr style="background:#f8fafc;font-weight:700;"><td style="padding:8px 10px;">Peak FTE</td><td style="padding:8px 10px;text-align:center;">${pkBl.toFixed(1)}</td><td style="padding:8px 10px;text-align:center;">${pkSc.toFixed(1)}</td><td style="padding:8px 10px;text-align:center;" class="${pkD>0?'delta-pos':pkD<0?'delta-neg':'delta-zero'}">${pkD>=0?'+':''}${pkD.toFixed(1)}</td></tr></tbody></table><div class="insight">💡 Estimated total person-days in scenario: <strong>${Math.round(totalDays).toLocaleString()} days</strong> across all ${RESOURCES.length} roles and 5 phases.</div>`;
@@ -649,7 +1182,7 @@ function applyAndView(){
 
 function renderRaci(){
   const cols=['pgm','padmin','cml','sipm','tl','bl'];
-  const colLabels={pgm:'Program Mgr',padmin:'Project Administrator',cml:'CM Lead',sipm:'SI PMs (per WS)',tl:'Technology Team (per WS)',bl:'Process Analysts'};
+  const colLabels={pgm:'Program Mgr',padmin:'Project Admin',cml:'CM Lead',sipm:'SI PMs (per WS)',tl:'Technology Team (per WS)',bl:'Process Analysts'};
   let html=`<table><thead><tr><th style="text-align:left;min-width:220px;">Activity</th>${cols.map(c=>`<th style="min-width:105px;">${colLabels[c]}</th>`).join('')}</tr></thead><tbody>`;
   RACI.forEach(row=>{
     html+=`<tr><td style="font-weight:500;text-align:left;">${row.activity}</td>`;
@@ -664,6 +1197,67 @@ renderRoleDesc();
 renderStats();
 renderScenarioControls();
 renderScenarioChart();
+renderWsConnector();
+
+function renderEPGArrow(){
+  const wrap=document.querySelector('.org-wrap');
+  const epg=document.getElementById('epg-box');
+  const hpmo=document.getElementById('hackett-pmo-right');
+  if(!wrap||!epg||!hpmo)return;
+  let svg=document.getElementById('epg-arrow-svg');
+  if(!svg){
+    svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.id='epg-arrow-svg';
+    svg.style.cssText='position:absolute;top:0;left:0;pointer-events:none;overflow:visible;z-index:10;';
+    wrap.appendChild(svg);
+  }
+  const wrapR=wrap.getBoundingClientRect();
+  const epgR=epg.getBoundingClientRect();
+  const hpmoR=hpmo.getBoundingClientRect();
+  const sl=wrap.scrollLeft||0,st=wrap.scrollTop||0;
+  // Start: right edge of EPG box, vertical center
+  const x1=epgR.right-wrapR.left+sl;
+  const y1=epgR.top+epgR.height/2-wrapR.top+st;
+  // End: left edge of Hackett PMO box, vertical center
+  const x2=hpmoR.left-wrapR.left+sl;
+  const y2=hpmoR.top+hpmoR.height/2-wrapR.top+st;
+  const cx=(x1+x2)/2;
+  svg.setAttribute('width',wrap.scrollWidth);
+  svg.setAttribute('height',wrap.scrollHeight);
+  const gap=4;
+  svg.innerHTML=`
+    <defs>
+      <marker id="epg-arr-end" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+        <polygon points="0 0, 9 4.5, 0 9" fill="#7c3aed" opacity="0.85"/>
+      </marker>
+      <marker id="epg-arr-start" markerWidth="9" markerHeight="9" refX="1" refY="4.5" orient="auto">
+        <polygon points="9 0, 0 4.5, 9 9" fill="#7c3aed" opacity="0.85"/>
+      </marker>
+    </defs>
+    <path d="M${x1+gap},${y1} C${cx},${y1} ${cx},${y2} ${x2-gap},${y2}"
+      fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="5,4"
+      marker-start="url(#epg-arr-start)" marker-end="url(#epg-arr-end)" opacity="0.72"/>`;
+}
+window.addEventListener('load',()=>{renderEPGArrow();});
+window.addEventListener('resize',renderEPGArrow);
+
+function switchPmoPhase(n){
+  [0,1].forEach(i=>{
+    const org=document.getElementById('pmo-org-'+i);
+    const btn=document.getElementById('pmobtn-'+i);
+    if(!org||!btn)return;
+    org.style.display=(i===n)?'block':'none';
+    if(i===n){
+      btn.style.background=n===0?'#15803d':'#1d4ed8';
+      btn.style.color='#fff';
+      btn.style.borderColor='transparent';
+    } else {
+      btn.style.background='#f1f5f9';
+      btn.style.color='#64748b';
+      btn.style.borderColor='#e2e8f0';
+    }
+  });
+}
 </script>
 </body>
 </html>
